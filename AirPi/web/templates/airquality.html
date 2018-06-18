@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Air quality{% endblock %}
+{% block status %}{{ status }}{% endblock %}
+{% block status2 %}{{ status }}{% endblock %}
+{% block body %}
+    <div class="o-container">
+              <div class="o-graph">
+                  <article class="o-section o-section--lg">
+                      <div class="o-layout o-layout--gutter o-layout--align-top">
+                          <div class="o-layout__item">
+                              <section class="o-row o-row--lg o-row--white-x-light">
+                                      <span class="o-data-curr">{{ co2 }} ppm</span><br><br>
+                                      <canvas id="myChart"></canvas>
+                              </section>
+                          </div>
+                      </div>
+                  </article>
+               </div>
+                <div class="o-data-graph">
+                  <article class="o-section o-section--lg">
+                          <div class="o-layout o-layout--gutter o-layout--align-top">
+                              <div class="o-layout__item u-1-of-3-bp1">
+                                  <section class="o-row o-row--md o-row--white-x-light">
+                                      CO2 ppm <br>
+                                      <span class="o-data-values">{{ co2 }}</span>
+                                  </section>
+                                  <section class="o-row o-row--md o-row--2 o-row--white-x-light">
+                                     TVOC ppb <br>
+                                      <span class="o-data-values">{{ tvoc }}</span>
+                                  </section>
+                              </div>
+                              <div class="o-layout__item u-2-of-3-bp1">
+                                  <section class="o-row o-row--md o-infobox o-row--white-x-light">
+                                       CO2 environment <br><br>
+                                       Carbon dioxide at levels that are unusually high indoors may cause occupants to grow drowsy or to get headaches. Outdoor CO2 levels are usually 350-450 ppm whereas the maximum indoor CO2 level considered acceptable is 2000 ppm.
+
+                                  </section>
+                              </div>
+                          </div>
+                      </article>
+                    </div>
+
+          </div>
+        </div>
+    <script>
+    'use strict';
+
+        let response;
+        //let body;
+        let Testwaarden = "";
+        let arraymin = [];
+        let arrayplus = [];
+        let arraydagen = [];
+        let place = "";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+
+        function init() {
+            //body = document.getElementById("body");
+            getWeather("Gent");
+        }
+
+        function drawChart() {
+            let ctx = document.getElementById("myChart");
+            console.info({{ tom|safe }})
+            let myChart = new Chart(ctx, {
+
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            fill: '-1',
+                            borderColor: '#3AE800',
+                            label: 'Max',
+                            data: {{ sensordata|safe }}
+                        }
+                    ],
+                    labels: {{ tom|safe }}
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        function getWeather(place) {
+            //let place = "Kortrijk"
+
+                    place = "Gent";
+                    let query = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' + place + '")';
+                    let xmlHttp = new XMLHttpRequest();
+                    arraymin = [];
+                    arrayplus = [];
+                    arraydagen = [];
+                    xmlHttp.onreadystatechange = function() {
+                        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                            Testwaarden = JSON.parse(this.responseText);
+                            toonOverzicht();
+                        }
+                    }
+                    xmlHttp.open('GET', 'http://query.yahooapis.com/v1/public/yql?q=' + query + '&format=json', true);
+                    xmlHttp.send(null);
+
+        }
+
+        function toonOverzicht() {
+            let voorspelling = "";
+
+            voorspelling = Testwaarden.query.results.channel.item.forecast;
+
+            for (let teller = 0; teller < voorspelling.length; teller++) {
+                arraymin.push(voorspelling[teller].low);
+                arrayplus.push(voorspelling[teller].high);
+                arraydagen.push(voorspelling[teller].date);
+            }
+
+            convert2Celsius();
+            drawChart();
+        }
+
+        function convert2Celsius() {
+            for (let teller = 0; teller < arraymin.length; teller++) {
+                arraymin[teller] = +((arraymin[teller] - 32) / 1.8).toFixed(1);
+                arrayplus[teller] = +((arrayplus[teller] - 32) / 1.8).toFixed(1);
+            }
+        }
+
+    </script>
+{% endblock %}

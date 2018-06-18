@@ -1,0 +1,45 @@
+{% extends "baseforms.html" %}
+{% block title %}Log in{% endblock %}
+{% block body %}
+    <div class="o-container">
+        <div class="c-login">
+            <article class="o-section o-section--lg">
+                <div class="o-layout o-layout--gutter o-layout--align-top">
+                    <div class="o-layout__item">
+                        <section class="o-row o-row--lg o-row--white-x-light">
+                            <div class="o-login-main">Log in<br><br>
+                                <div class="o-form">
+                                    <form role="form" action="" method="POST">
+                                        <label for="lblUsername">Email: </label>
+                                        <input type="email" name="email" value="" required>
+
+                                        <label for="Password">Password: </label>
+                                        <input type="password" name="password" value="" required>
+
+                                        <p class="o-reg">Not registered? <a class="o-reglink"
+                                                                            href="{{ url_for("register") }}">Create
+                                            an account</a></p>
+                                        {% with messages = get_flashed_messages(with_categories = true) %}
+                                            {% if messages %}
+                                                <ul class="o-list">
+                                                    {% for category, message in messages %}
+                                                        {% if  category == "error" %}
+                                                            <li style="color:#FF0000">{{ message }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        {% endwith %}
+                                        <input name="button" type="submit" value="login">
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

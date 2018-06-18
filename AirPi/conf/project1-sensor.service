@@ -1,0 +1,14 @@
+[Unit]
+Description=Project 1 sensor service
+After=network.target
+BindsTo=mysqld.service
+After=mysqld.service
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/project1/sensor
+ExecStart=/home/pi/project1/env/bin/python /home/pi/project1/sensor/sensor.py
+
+[Install]
+WantedBy=multi-user.target

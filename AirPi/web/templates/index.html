@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block status %}{{ status }}{% endblock %}
+{% block status2 %}{{ status }}{% endblock %}
+{% block body %}
+<div class="o-container">
+                <div class="o-panel">
+                <article class="o-section o-section--lg">
+                        <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                            <div class="o-layout__item u-1-of-2-bp4">
+                                <section class="o-row o-row--lg o-row--white-x-light">
+                                    <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                                        <div class="o-layout__item u-1-of-3-bp2">
+                                            <div class="o-data" id="circleco2" style="border-color:#3AE800;">
+                                              <sup style="color:#3AE800;" class="o-unit" id="co2unit">ppm</sup><br>{{ co2 }}
+                                            </div>
+                                        </div>
+                                        <div class="o-layout__item u-2-of-3-bp2">
+                                          <div class="o-info">
+                                            CO2 level indoors can affect the way you experience your day. You should open your windows if it raises above 1000 parts per million.
+                                          </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="o-layout__item u-1-of-2-bp4">
+                                <section class="o-row o-row--lg o-row--white-x-light">
+                                    <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                                        <div class="o-layout__item u-1-of-3-bp2">
+                                          <div class="o-data" style="border-color:#FF7400;">
+                                              <sup style="color:#FF7400;" class="o-unit">°C</sup><br>{{ temp }}
+                                          </div>
+                                        </div>
+                                        <div class="o-layout__item u-2-of-3-bp2">
+                                          <div class="o-info">
+                                            If the temperature raises above 25°C its is highly recommended to consume over 2 liters of water a day.
+                                          </div>
+
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="o-section o-section--lg">
+                            <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                                <div class="o-layout__item u-1-of-2-bp4">
+                                    <section class="o-row o-row--lg o-row--white-x-light">
+                                        <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                                            <div class="o-layout__item u-1-of-3-bp2">
+                                              <div class="o-data" id="circletvoc" style="border-color:#3AE800;">
+                                                <sup style="color:#3AE800;" class="o-unit" id="tvocunit">ppb</sup><br>{{ tvoc }}
+                                              </div>
+                                            </div>
+                                            <div class="o-layout__item u-2-of-3-bp2">
+                                              <div class="o-info">
+                                                The amount of volatile organic compounds in a room could raise up to above 220 ppb. If this is the case you need to ventilate the room.
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <div class="o-layout__item u-1-of-2-bp4">
+                                    <section class="o-row o-row--lg o-row--white-x-light">
+                                        <div class="o-layout o-layout--gutter-lg o-layout--align-top">
+                                            <div class="o-layout__item u-1-of-3-bp2">
+                                              <div class="o-data" style="border-color:#2BB3FF;">
+                                                <sup class="o-unit" style="color:#2BB3FF;">%</sup><br>{{ hum }}
+                                              </div>
+                                            </div>
+                                            <div class="o-layout__item u-2-of-3-bp2">
+                                              <div class="o-info">
+                                                The air humidity can infuence how we experience the temperature. A high humidity can make you feel hot and tired.
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+            </div>
+        </div>
+        </div>
+    <script>
+    "use strict";
+    document.addEventListener('DOMContentLoaded', function() {
+            init();
+            console.info("loaded")
+        });
+
+        function init() {
+            //body = document.getElementById("body");
+            changeColor();
+        }
+
+        function changeColor(){
+            let tvoc;
+            let tvocunit
+            tvoc = document.getElementById("circletvoc");
+            tvocunit = document.getElementById("tvocunit");
+
+            let tvoclevel = {{ tvoc }}
+            if(tvoclevel > 660){
+                console.info("test")
+                tvoc.style.borderColor = "#FF0000";
+                tvocunit.style.color = "#FF0000";
+                //tvoc.innerHTML = "{{ tvoc }}<span class='o-alert'><br>danger</span>"
+            }
+
+            let co2;
+            let co2unit;
+            co2 = document.getElementById("circleco2");
+            co2unit = document.getElementById("co2unit");
+
+            let co2level = {{ co2 }}
+            if(co2level > 2000){
+                console.info("test")
+                co2.style.borderColor = "#FF0000";
+                co2unit.style.color = "#FF0000";
+                //co2.innerHTML = "{{ co2 }}<span class='o-alert'><br>danger</span>"
+            }
+        }
+    </script>
+{% endblock %}

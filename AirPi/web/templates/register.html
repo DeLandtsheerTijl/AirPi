@@ -1,0 +1,50 @@
+{% extends "baseforms.html" %}
+{% block title %}Register{% endblock %}
+{% block body %}
+    <div class="o-container">
+        <div class="c-login">
+            <article class="o-section o-section--lg">
+                <div class="o-layout o-layout--gutter o-layout--align-top">
+                    <div class="o-layout__item">
+                        <section class="o-row o-row--lg o-row--white-x-light">
+                            <div class="o-login-main">Register<br><br>
+                                <div class="o-form">
+                                    <form role="form" action="{{ url_for('register') }}" method="POST">
+                                        <label for="lblUsername">Email: </label>
+                                        <input type="email" name="email" value="">
+
+                                        <label for="lblUsername">Username: </label>
+                                        <input type="text" name="username" value="" required>
+
+                                        <label for="Password">Password: </label>
+                                        <input type="password" name="password" value="" required><br><br>
+
+                                        {% with messages = get_flashed_messages(with_categories = true) %}
+                                            {% if messages %}
+                                                <ul class="o-list">
+                                                    {% for category, message in messages %}
+                                                        {% if category == "error" %}
+                                                            <li style="color:#FF0000">{{ message }}</li>
+                                                        {% else %}
+                                                            <li style="color:#008910">{{ message }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        {% endwith %}
+
+                                        <input name="button" type="submit" value="Register">
+
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    </div>
+{% endblock %}
